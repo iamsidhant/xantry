@@ -5,7 +5,7 @@ const App = () => {
   return (
     <>
     <main className='relative'>
-      <h1 className='text-5xl text-orange-600 font-bold'>Welcome to a special website</h1>
+      <h1 className='text-5xl text-violet-300 font-bold'>Welcome to a special website</h1>
     </main>
     </>
   )
