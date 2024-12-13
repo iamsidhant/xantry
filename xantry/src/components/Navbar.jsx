@@ -1,6 +1,6 @@
 import React from 'react'
 import gsap from 'gsap';
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { TiLocationArrow } from 'react-icons/ti';
 
 import Button from './Button';
@@ -8,7 +8,28 @@ import Button from './Button';
 const navItems = ["Nexus", "Vault", "Prologue", "About", "Contact"];
 
 const Navbar = () => {
+  // State for toggling audio and visual indicator
+  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const [isIndicatorActive, setIsIndicatorActive] = useState(false);
+
+  // Refs for audio and navigation container
+  const audioElementRef = useRef(null);
   const navContainerRef = useRef(null);
+
+  // Toggle audio and visual indicator
+  const toggleAudioIndicator = () => {
+    setIsAudioPlaying((prev) => !prev);
+    setIsIndicatorActive((prev) => !prev);
+  }
+
+  // Manage audio playback
+  useEffect(() => {
+    if (isAudioPlaying) {
+      audioElementRef.current.play();
+    } else {
+      audioElementRef.current.pause();
+    }
+  }, [isAudioPlaying])
 
   return (
     <div
@@ -35,7 +56,40 @@ const Navbar = () => {
 
           {/* Navigation links and Audio Button */}
           <div className='flex h-full items-center'>
-            <div className=''></div>
+            <div className='hidden md:block'>
+              {navItems.map((item, index) => (
+                <a
+                  key={index}
+                  href={`#${item.toLowerCase()}`}
+                  className='nav-hover-btn'
+                >
+                  {item}
+                </a>
+              ))}
+            </div>
+
+            <button
+              onClick={toggleAudioIndicator}
+              className='ml-10 flex items-center space-x-0.5'
+            >
+              <audio 
+                ref={audioElementRef}
+                className='hidden'
+                src='/audio/loop.mp3'
+                loop
+              />
+              {[1, 2, 3, 4].map((bar) => (
+                <div 
+                  key={bar}
+                  className={('indicator-line', {
+                    active: isIndicatorActive,
+                  })}
+                  style={{
+                    animationDelay: `${bar * 0.1}s`,
+                  }}
+                />
+              ))}
+            </button>
           </div>
         </nav>
       </header>
